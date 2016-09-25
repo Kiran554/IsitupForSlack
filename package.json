@@ -1,0 +1,23 @@
+{
+  "name": "isitupforslack",
+  "version": "1.0.0",
+  "description": "to check for domain state.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiran554/IsitupForSlack.git"
+  },
+  "keywords": [
+    "isitup"
+  ],
+  "author": "Kiran Atmala <kiran.atmala@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kiran554/IsitupForSlack/issues"
+  },
+  "homepage": "https://github.com/Kiran554/IsitupForSlack#readme"
+}
