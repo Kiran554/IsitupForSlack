@@ -12,7 +12,8 @@ http.createServer(
 	        var reply = "";
 	        processPost(req, res, function(){
 	        	console.log(req.post);
-	        	reply = executeRequest(req.post);
+	        	//reply = executeRequest(req.post);
+	        	reply = req.post.text;
 	        });	
 	        res.writeHead(200, {'Content-Type': 'text/html'});
 	        res.end(reply);
