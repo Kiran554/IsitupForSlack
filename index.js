@@ -54,7 +54,7 @@ function executeRequest (data) {
 		  headers:{'user-agent': user_agent}
 		};
 
-		callback = function(response) {
+		var callback = function(response) {
 		  var str = '';
 
 		  //another chunk of data has been recieved, so append it to `str`
