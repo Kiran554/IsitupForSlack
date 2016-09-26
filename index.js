@@ -108,7 +108,7 @@ function processResponse(data) {
 		    reply += "Please enter both the domain name AND suffix (example: *amazon.com* or *whitehouse.gov*).";
 		    break;
 	}
-	console('inside!!\t' + reply);
+	console.log('inside!!\t' + reply);
 	return reply;
 }
 
