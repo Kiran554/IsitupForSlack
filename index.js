@@ -1,7 +1,7 @@
 'use strict';
 
 const user_agent = "IsitupForSlack/1.0 (https://github.com/Kiran554/IsitupForSlack.git; kiran.atmala@gmail.com)";
-const host = "https://isitup.org/";
+const host = "isitup.org";
 var http = require('http');
 var https = require('https');
 var querystring = require('querystring');
@@ -56,6 +56,7 @@ function executeRequest (request, response, callback) {
 	if(request.post.token === 'bHJ2oQLLMDyy9KStsJdgzmzT' && request.post.command === '/isitup') {
 		var options = {
 		  host: host,
+		  port: 443,
 		  path: "/" + request.post.text + ".json",
 		  headers:{'user-agent': user_agent},
 		  method: "GET"
