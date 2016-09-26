@@ -13,7 +13,6 @@ function init(){
 		        processPost(req, res, function(){
 		        	console.log(req.post);
 		        	executeRequest(req, res, function(){
-		        		console.log(res.reply);
 		        		res.writeHead(200, {'Content-Type': 'text/html'});
 		        		res.end(res.reply);
 		        	});
