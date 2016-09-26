@@ -9,28 +9,16 @@ http.createServer(
 	function (req, res) { 
 		if (req.method == 'POST') {
 	        console.log("POST");
-	        /*var reply = "";
+	        var reply = "";
 	        processPost(req, res, function(){
 	        	console.log(req.post);
 	        	//reply = executeRequest(req.post);
 	        	reply = req.post.text;
+	        	res.writeHead(200, {'Content-Type': 'text/html'});
+	        	res.end(reply);
 	        });	
-	        console.log('last!!');
-	        res.writeHead(200, {'Content-Type': 'text/html'});
-	        res.end(reply);*/
-	        var body = '';
-	        req.on('data', function (data) {
-	            body += data;
-	            console.log("Partial body: " + body);
-	        });
-	        req.on('end', function () {
-	            console.log("Body: " + body);
-	        });
-	        console.log('POST POST');
-	        res.writeHead(200, {'Content-Type': 'text/html'});
-	        res.end('post received');
 	    }
-	}
+	 }
 ).listen(process.env.PORT || 5000);
 
 function processPost(request, response, callback) {
@@ -38,12 +26,9 @@ function processPost(request, response, callback) {
     if(typeof callback !== 'function') return null;
 
     if(request.method == 'POST') {
-    	console.log('inside Post!!');
         request.on('data', function(data) {
-        	console.log('inside data!!!');
             queryData += data;
             if(queryData.length > 1e6) {
-            	console.log('inside!!!');
                 queryData = "";
                 response.writeHead(413, {'Content-Type': 'text/plain'}).end();
                 request.connection.destroy();
@@ -51,7 +36,6 @@ function processPost(request, response, callback) {
         });
 
         request.on('end', function() {
-        	console.log('inside end!!!');
             request.post = querystring.parse(queryData);
             callback();
         });
