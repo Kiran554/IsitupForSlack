@@ -91,7 +91,7 @@ function executeRequest (request, response, callback) {
 } 
 
 function processResponse(data) {
-	console.log('inside!!')
+	console.log('inside!!\t' + data["status_code"])
 	var reply = ""
 	switch(data["status_code"]) {
 		case 1:
