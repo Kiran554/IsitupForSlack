@@ -58,7 +58,7 @@ function executeRequest (request, response, callback) {
 		  host: host,
 		  path: "/" + request.post.text + ".json",
 		  headers:{'user-agent': user_agent},
-		  method: GET
+		  method: "GET"
 		};
 
 		var req = https.request(options, function(res) {
