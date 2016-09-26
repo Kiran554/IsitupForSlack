@@ -3,6 +3,7 @@
 const user_agent = "IsitupForSlack/1.0 (https://github.com/Kiran554/IsitupForSlack.git; kiran.atmala@gmail.com)";
 const host = "https://isitup.org/";
 var http = require('http');
+var https = require('https');
 var querystring = require('querystring');
 
 function init(){
@@ -56,24 +57,31 @@ function executeRequest (request, response, callback) {
 		var options = {
 		  host: host,
 		  path: "/" + request.post.text + ".json",
-		  headers:{'user-agent': user_agent}
+		  headers:{'user-agent': user_agent},
+		  method: GET
 		};
 
-		http.request(options, function(res) {
-		  var str = '';
+		var req = https.request(options, function(res) {
+			console.log('statusCode:', res.statusCode);
+  			console.log('headers:', res.headers);
+	  		var str = '';
 
-		  //another chunk of data has been recieved, so append it to `str`
-		  res.on('data', function (chunk) {
-		    str += chunk;
-		  });
+		  	//another chunk of data has been recieved, so append it to `str`
+		  	res.on('data', function (chunk) {
+		    	str += chunk;
+		  	});
 
-		  //the whole res has been recieved, so we just print it out here
-		  res.on('end', function () {
-		    console.log(str);
-		    response.reply = processResponse(str);
-		    callback();
-		  });
-		}).end();
+		  	//the whole res has been recieved, so we just print it out here
+		  	res.on('end', function () {
+		    	console.log(str);
+		    	response.reply = processResponse(str);
+		    	callback();
+		  	});
+		})
+		req.end();
+		req.on('error', function(error){
+			console.log(error);
+		});
 	}  else {
         response.writeHead(405, {'Content-Type': 'text/plain'});
         response.end();
