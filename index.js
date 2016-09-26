@@ -74,7 +74,7 @@ function executeRequest (request, response, callback) {
 		  	//the whole res has been recieved, so we just print it out here
 		  	res.on('end', function () {
 		    	console.log(str);
-		    	response.reply = processResponse(str);
+		    	response.reply = processResponse(JSON.parse(str));
 		    	callback();
 		  	});
 		})
