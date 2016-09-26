@@ -18,7 +18,6 @@ function init(){
 		        		res.writeHead(200, {'Content-Type': 'text/html'});
 		        		res.end(res.reply);
 		        	});
-		        	
 		        });	
 		    }
 		 }
@@ -82,6 +81,8 @@ function executeRequest (request, response, callback) {
 		req.end();
 		req.on('error', function(error){
 			console.log(error);
+			response.writeHead(405, {'Content-Type': 'text/plain'});
+        	response.end();
 		});
 	}  else {
         response.writeHead(405, {'Content-Type': 'text/plain'});
@@ -90,22 +91,24 @@ function executeRequest (request, response, callback) {
 } 
 
 function processResponse(data) {
+	console.log('inside!!')
 	var reply = ""
 	switch(data["status_code"]) {
-	case 1:
-  		//Yay, the domain is up! 
-	    reply = ":thumbsup: I am happy to report that *<http://" + data["domain"] + ">* is *up*!";
-	    break;
-	case 2:
-	    //Boo, the domain is down. 
-	    reply = ":disappointed: I am sorry to report that *<http://" + data["domain"] + ">* is *not up*!";
-	    break;
-	case 3:
-	    //Uh oh, isitup.org doesn't think the domain entered by the user is valid
-	    reply = ":interrobang: *" + data["domain"] + "* does not appear to be a valid domain. \n";
-	    reply += "Please enter both the domain name AND suffix (example: *amazon.com* or *whitehouse.gov*).";
-	    break;
+		case 1:
+	  		//Yay, the domain is up! 
+		    reply = ":thumbsup: I am happy to report that *<http://" + data["domain"] + ">* is *up*!";
+		    break;
+		case 2:
+		    //Boo, the domain is down. 
+		    reply = ":disappointed: I am sorry to report that *<http://" + data["domain"] + ">* is *not up*!";
+		    break;
+		case 3:
+		    //Uh oh, isitup.org doesn't think the domain entered by the user is valid
+		    reply = ":interrobang: *" + data["domain"] + "* does not appear to be a valid domain. \n";
+		    reply += "Please enter both the domain name AND suffix (example: *amazon.com* or *whitehouse.gov*).";
+		    break;
 	}
+	console('inside!!\t' + reply);
 	return reply;
 }
 
