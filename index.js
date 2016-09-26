@@ -26,9 +26,12 @@ function processPost(request, response, callback) {
     if(typeof callback !== 'function') return null;
 
     if(request.method == 'POST') {
+    	console.log('inside Post!!');
         request.on('data', function(data) {
+        	console.log('inside data!!!');
             queryData += data;
             if(queryData.length > 1e6) {
+            	console.log('inside!!!');
                 queryData = "";
                 response.writeHead(413, {'Content-Type': 'text/plain'}).end();
                 request.connection.destroy();
@@ -36,6 +39,7 @@ function processPost(request, response, callback) {
         });
 
         request.on('end', function() {
+        	console.log('inside end!!!');
             request.post = querystring.parse(queryData);
             callback();
         });
