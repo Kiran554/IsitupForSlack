@@ -10,7 +10,6 @@ function init(){
 	http.createServer(
 		function (req, res) { 
 			if (req.method == 'POST') {
-		        console.log("POST");
 		        processPost(req, res, function(){
 		        	console.log(req.post);
 		        	executeRequest(req, res, function(){
@@ -91,7 +90,6 @@ function executeRequest (request, response, callback) {
 } 
 
 function processResponse(data) {
-	console.log('inside!!\t' + data["status_code"])
 	var reply = ""
 	switch(data["status_code"]) {
 		case 1:
@@ -108,7 +106,6 @@ function processResponse(data) {
 		    reply += "Please enter both the domain name AND suffix (example: *amazon.com* or *whitehouse.gov*).";
 		    break;
 	}
-	console.log('inside!!\t' + reply);
 	return reply;
 }
 
