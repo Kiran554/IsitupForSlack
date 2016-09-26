@@ -99,3 +99,8 @@ function processResponse(data) {
 	}
 	return reply;
 }
+
+// Call init function
+(function(){
+	init();
+})();
