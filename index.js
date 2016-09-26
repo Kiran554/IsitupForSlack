@@ -5,21 +5,24 @@ const host = "https://isitup.org/";
 var http = require('http');
 var querystring = require('querystring');
 
-http.createServer(
-	function (req, res) { 
-		if (req.method == 'POST') {
-	        console.log("POST");
-	        var reply = "";
-	        processPost(req, res, function(){
-	        	console.log(req.post);
-	        	//reply = executeRequest(req.post);
-	        	reply = req.post.text;
-	        	res.writeHead(200, {'Content-Type': 'text/html'});
-	        	res.end(reply);
-	        });	
-	    }
-	 }
-).listen(process.env.PORT || 5000);
+function init(){
+	http.createServer(
+		function (req, res) { 
+			if (req.method == 'POST') {
+		        console.log("POST");
+		        processPost(req, res, function(){
+		        	console.log(req.post);
+		        	executeRequest(req, res, function(){
+		        		console.log(res.reply);
+		        		res.writeHead(200, {'Content-Type': 'text/html'});
+		        		res.end(res.reply);
+		        	});
+		        	
+		        });	
+		    }
+		 }
+	).listen(process.env.PORT || 5000);
+}
 
 function processPost(request, response, callback) {
     var queryData = "";
@@ -46,50 +49,51 @@ function processPost(request, response, callback) {
     }
 }
 
-function executeRequest (data) {
+function executeRequest (request, response, callback) {
+	if(typeof callback !== 'function') return null;
 	// Only if the request is coming from slack
-	if(data.token === 'bHJ2oQLLMDyy9KStsJdgzmzT' && data.command === '/isitup') {
+	if(request.post.token === 'bHJ2oQLLMDyy9KStsJdgzmzT' && request.post.command === '/isitup') {
 		var options = {
 		  host: host,
-		  path: "/" + data.text + ".json",
+		  path: "/" + request.post.text + ".json",
 		  headers:{'user-agent': user_agent}
 		};
 
-		var callback = function(response) {
+		http.request(options, function(res) {
 		  var str = '';
 
 		  //another chunk of data has been recieved, so append it to `str`
-		  response.on('data', function (chunk) {
+		  res.on('data', function (chunk) {
 		    str += chunk;
 		  });
 
-		  //the whole response has been recieved, so we just print it out here
-		  response.on('end', function () {
+		  //the whole res has been recieved, so we just print it out here
+		  res.on('end', function () {
 		    console.log(str);
-		    return processResponse(str);
+		    response.reply = processResponse(str);
+		    callback();
 		  });
-		}
-
-		http.request(options, callback).end();
-	} else {
-		return "";
-	}
+		}).end();
+	}  else {
+        response.writeHead(405, {'Content-Type': 'text/plain'});
+        response.end();
+    }
 } 
 
-function processResponse(response) {
+function processResponse(data) {
 	var reply = ""
-	switch(response["status_code"]) {
+	switch(data["status_code"]) {
 	case 1:
   		//Yay, the domain is up! 
-	    reply = ":thumbsup: I am happy to report that *<http://" + response["domain"] + ">* is *up*!";
+	    reply = ":thumbsup: I am happy to report that *<http://" + data["domain"] + ">* is *up*!";
 	    break;
 	case 2:
 	    //Boo, the domain is down. 
-	    reply = ":disappointed: I am sorry to report that *<http://" + response["domain"] + ">* is *not up*!";
+	    reply = ":disappointed: I am sorry to report that *<http://" + data["domain"] + ">* is *not up*!";
 	    break;
 	case 3:
 	    //Uh oh, isitup.org doesn't think the domain entered by the user is valid
-	    reply = ":interrobang: *" + response["domain"] + "* does not appear to be a valid domain. \n";
+	    reply = ":interrobang: *" + data["domain"] + "* does not appear to be a valid domain. \n";
 	    reply += "Please enter both the domain name AND suffix (example: *amazon.com* or *whitehouse.gov*).";
 	    break;
 	}
